@@ -81,7 +81,7 @@ int main(void) {
     printf("Digite o numero de estados: ");
     scanf("%d", &af.numEstados);
 
-    printf("Digite o numero de transições: ");
+    printf("Digite o numero de transicoes: ");
     scanf("%d", &af.numTransicoes);
 
     printf("Digite o numero de simbolos: ");
@@ -108,17 +108,13 @@ int main(void) {
 
     char palavra[100];
     printf("Digite uma palavra: ");
-    fgets(palavra, sizeof(palavra), stdin);
-    palavra[strcspn(palavra, "\n")] = 0;  // Remove o '\n' do final
-    getchar();
-
+    scanf("%s", palavra);
 
     if (ehAceito(&af, palavra)) {
         printf("A palavra eh aceita.\n");
     } else {
         printf("A palavra nao eh aceita.\n");
     }
-
     getchar();
     getchar();
     return 0;
