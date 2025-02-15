@@ -98,31 +98,31 @@ int ehAceito(AF_e *af, char *palavra) {
 
 int main(void) {
     AF_e af;
+    FILE *file = fopen("automato.txt", "r");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo.\n");
+        return 1;
+    }
 
-    printf("Digite o numero de estados: ");
-    scanf("%d", &af.numEstados);
+    fscanf(file, "%d", &af.numEstados);
+    fscanf(file, "%d", &af.estadoInicial);
+    fscanf(file, "%d", &af.numTransicoes);
 
-    printf("Digite o estado inicial: ");
-    scanf("%d", &af.estadoInicial);
-
-    printf("Digite o numero de transicoes: ");
-    scanf("%d", &af.numTransicoes);
-
-    printf("Digite os estados finais (termine com -1): ");
     for (int i = 0; i < MAX_ESTADOS; i++) {
-        scanf("%d", &af.estadosFinais[i]);
+        fscanf(file, "%d", &af.estadosFinais[i]);
         if (af.estadosFinais[i] == -1) {
             break;
         }
     }
 
-    printf("Digite as transicoes (formato: de simbolo para, termine com -1):\n");
     for (int i = 0; i < af.numTransicoes; i++) {
         int de, para;
         char simbolo;
-        scanf("%d %c %d", &de, &simbolo, &para);
+        fscanf(file, "%d %c %d", &de, &simbolo, &para);
         af.transicoes[i] = (Transicao){de, simbolo, para};
     }
+
+    fclose(file);
 
     imprimirFechoEpsilon(&af);
 
