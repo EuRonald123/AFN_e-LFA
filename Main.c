@@ -29,6 +29,20 @@ void fechoEpsilon(int estado, int fecho[], AF_e *af) {
     }
 }
 
+void imprimirFechoEpsilon(AF_e *af) {
+    for (int estado = 0; estado < af->numEstados; estado++) {
+        int fecho[MAX_ESTADOS] = {0};
+        fechoEpsilon(estado, fecho, af);
+        printf("Fecho epsilon do estado %d: ", estado);
+        for (int i = 0; i < af->numEstados; i++) {
+            if (fecho[i]) {
+                printf("%d ", i);
+            }
+        }
+        printf("\n");
+    }
+}
+
 int ehAceito(AF_e *af, char *palavra) {
     int estadosAtuais[MAX_ESTADOS] = {0};
     int proximosEstados[MAX_ESTADOS] = {0};
@@ -48,9 +62,10 @@ int ehAceito(AF_e *af, char *palavra) {
             if (estadosAtuais[j]) {
                 for (int k = 0; k < af->numTransicoes; k++) {
                     if (af->transicoes[k].de == j && af->transicoes[k].simbolo == simbolo) {
-                        fechoEpsilon(af->transicoes[k].para, fecho, af);
+                        int fechoTemp[MAX_ESTADOS] = {0};
+                        fechoEpsilon(af->transicoes[k].para, fechoTemp, af);
                         for (int l = 0; l < af->numEstados; l++) {
-                            if (fecho[l]) {
+                            if (fechoTemp[l]) {
                                 proximosEstados[l] = 1;
                             }
                         }
@@ -59,6 +74,14 @@ int ehAceito(AF_e *af, char *palavra) {
             }
         }
         memcpy(estadosAtuais, proximosEstados, sizeof(estadosAtuais));
+        // Recalcular o fecho epsilon para os estados atuais
+        memset(fecho, 0, sizeof(fecho));
+        for (int j = 0; j < af->numEstados; j++) {
+            if (estadosAtuais[j]) {
+                fechoEpsilon(j, fecho, af);
+            }
+        }
+        memcpy(estadosAtuais, fecho, sizeof(estadosAtuais));
     }
 
     for (int i = 0; i < af->numEstados; i++) {
@@ -101,6 +124,8 @@ int main(void) {
         af.transicoes[i] = (Transicao){de, simbolo, para};
     }
 
+    imprimirFechoEpsilon(&af);
+
     char palavra[100];
     printf("Digite uma palavra: ");
     scanf("%s", palavra);
@@ -110,7 +135,10 @@ int main(void) {
     } else {
         printf("A palavra nao eh aceita.\n");
     }
-    getchar();
-    getchar();
+
+    printf("Pressione qualquer tecla para fechar o programa...\n");
+    getchar(); // Consumir o '\n' deixado pelo scanf
+    getchar(); // Esperar por uma tecla
+
     return 0;
 }
