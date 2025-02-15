@@ -139,6 +139,6 @@ int main(void) {
     printf("Pressione qualquer tecla para fechar o programa...\n");
     getchar(); // Consumir o '\n' deixado pelo scanf
     getchar(); // Esperar por uma tecla
-
+    //teste;
     return 0;
 }
