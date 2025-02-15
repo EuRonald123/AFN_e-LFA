@@ -15,7 +15,6 @@ typedef struct {
 typedef struct {
     int numEstados;
     int numTransicoes;
-    int numSimbolos;
     int estadoInicial;
     int estadosFinais[MAX_ESTADOS];
     Transicao transicoes[MAX_TRANSICOES];
@@ -76,19 +75,15 @@ int ehAceito(AF_e *af, char *palavra) {
 
 int main(void) {
     AF_e af;
-    char buffer[100];
 
     printf("Digite o numero de estados: ");
     scanf("%d", &af.numEstados);
 
-    printf("Digite o numero de transicoes: ");
-    scanf("%d", &af.numTransicoes);
-
-    printf("Digite o numero de simbolos: ");
-    scanf("%d", &af.numSimbolos);
-
     printf("Digite o estado inicial: ");
     scanf("%d", &af.estadoInicial);
+
+    printf("Digite o numero de transicoes: ");
+    scanf("%d", &af.numTransicoes);
 
     printf("Digite os estados finais (termine com -1): ");
     for (int i = 0; i < MAX_ESTADOS; i++) {
