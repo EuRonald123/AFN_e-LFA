@@ -123,22 +123,38 @@ int main(void) {
     }
 
     fclose(file);
+    int rodando=1;
+    
+    while(rodando){
+        printf("1-Imprimir fecho epsilon\n2-Verificar palavra\n3-Sair\n");
+        int opcao;
+        scanf("%d",&opcao);
+        switch(opcao){
+            case 1:
+                imprimirFechoEpsilon(&af);
+                break;
+            case 2:
+                char palavra[100];
+                printf("Digite uma palavra: ");
+                scanf("%s", palavra);
 
-    imprimirFechoEpsilon(&af);
-
-    char palavra[100];
-    printf("Digite uma palavra: ");
-    scanf("%s", palavra);
-
-    if (ehAceito(&af, palavra)) {
-        printf("A palavra eh aceita.\n");
-    } else {
-        printf("A palavra nao eh aceita.\n");
+                if (ehAceito(&af, palavra)) {
+                    printf("A palavra eh aceita.\n");
+                } else {
+                    printf("A palavra nao eh aceita.\n");
+                }
+                break;
+            case 3:
+                rodando=0;
+                break;
+            default:
+                printf("Opcao invalida\n");
+                break;
+        }
     }
 
     printf("Pressione qualquer tecla para fechar o programa...\n");
-    getchar(); // Consumir o '\n' deixado pelo scanf
-    getchar(); // Esperar por uma tecla
-    //teste;
+    getchar();
+    getchar();
     return 0;
 }
