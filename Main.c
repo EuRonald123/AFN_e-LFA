@@ -33,13 +33,18 @@ void imprimirFechoEpsilon(AF_e *af) {
     for (int estado = 0; estado < af->numEstados; estado++) {
         int fecho[MAX_ESTADOS] = {0};
         fechoEpsilon(estado, fecho, af);
-        printf("Fecho epsilon do estado %d: ", estado);
+        printf("Fecho epsilon do estado %d: {", estado);
+        int primeiro = 1;
         for (int i = 0; i < af->numEstados; i++) {
             if (fecho[i]) {
-                printf("%d ", i);
+                if (!primeiro) {
+                    printf(",");
+                }
+                printf("%d", i);
+                primeiro = 0;
             }
         }
-        printf("\n");
+        printf("}\n");
     }
 }
 
@@ -126,7 +131,7 @@ int main(void) {
     int rodando=1;
     
     while(rodando){
-        printf("1-Imprimir fecho epsilon\n2-Verificar palavra\n3-Sair\n");
+        printf("\n1-Imprimir fecho epsilon\n2-Verificar palavra\n3-Sair\n");
         int opcao;
         scanf("%d",&opcao);
         switch(opcao){
@@ -135,7 +140,7 @@ int main(void) {
                 break;
             case 2:
                 char palavra[100];
-                printf("Digite uma palavra: ");
+                printf("\nDigite uma palavra: ");
                 scanf("%s", palavra);
 
                 if (ehAceito(&af, palavra)) {
