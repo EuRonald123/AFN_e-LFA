@@ -138,7 +138,7 @@ int main(void) {
             case 1:
                 imprimirFechoEpsilon(&af);
                 break;
-            case 2:
+            case 2:{
                 char palavra[100];
                 printf("\nDigite uma palavra: ");
                 scanf("%s", palavra);
@@ -149,6 +149,7 @@ int main(void) {
                     printf("A palavra nao eh aceita.\n");
                 }
                 break;
+            }
             case 3:
                 rodando=0;
                 break;
