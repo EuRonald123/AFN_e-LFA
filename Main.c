@@ -2,9 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_ESTADOS 5
-#define MAX_TRANSICOES 7
-#define MAX_SIMBOLOS 3
+#define MAX_ESTADOS 500
+#define MAX_TRANSICOES 700
 
 typedef struct {
     int de;
@@ -16,6 +15,7 @@ typedef struct {
     int numEstados;
     int numTransicoes;
     int estadoInicial;
+    int numEstadosFinais;
     int estadosFinais[MAX_ESTADOS];
     Transicao transicoes[MAX_TRANSICOES];
 } AF_e;
@@ -79,70 +79,56 @@ int ehAceito(AF_e *af, char *palavra) {
             }
         }
         memcpy(estadosAtuais, proximosEstados, sizeof(estadosAtuais));
-        // Recalcular o fecho epsilon para os estados atuais
-        memset(fecho, 0, sizeof(fecho));
-        for (int j = 0; j < af->numEstados; j++) {
-            if (estadosAtuais[j]) {
-                fechoEpsilon(j, fecho, af);
-            }
-        }
-        memcpy(estadosAtuais, fecho, sizeof(estadosAtuais));
     }
 
-    for (int i = 0; i < af->numEstados; i++) {
-        if (estadosAtuais[i]) {
-            for (int j = 0; j < MAX_ESTADOS; j++) {
-                if (af->estadosFinais[j] == i) {
-                    return 1;
-                }
-            }
+    for (int i = 0; i < af->numEstadosFinais; i++) {
+        if (estadosAtuais[af->estadosFinais[i]]) {
+            return 1;
         }
     }
     return 0;
 }
 
-int main(void) {
-    AF_e af;
-    FILE *file = fopen("automato.txt", "r");
-    if (file == NULL) {
-        printf("Erro ao abrir o arquivo.\n");
-        return 1;
+void inserirAutomato(AF_e *af) {
+    printf("Digite o numero de estados: ");
+    scanf("%d", &af->numEstados);
+    printf("Digite o estado inicial: ");
+    scanf("%d", &af->estadoInicial);
+    printf("Digite o numero de estados finais: ");
+    scanf("%d", &af->numEstadosFinais);
+    printf("Digite os estados finais: ");
+    for (int i = 0; i < af->numEstadosFinais; i++) {
+        scanf("%d", &af->estadosFinais[i]);
     }
 
-    fscanf(file, "%d", &af.numEstados);
-    fscanf(file, "%d", &af.estadoInicial);
-    fscanf(file, "%d", &af.numTransicoes);
-
-    for (int i = 0; i < MAX_ESTADOS; i++) {
-        fscanf(file, "%d", &af.estadosFinais[i]);
-        if (af.estadosFinais[i] == -1) {
-            break;
-        }
-    }
-
-    for (int i = 0; i < af.numTransicoes; i++) {
+    printf("Digite o numero de transicoes: ");
+    scanf("%d", &af->numTransicoes);
+    printf("Digite as transicoes no formato 'de simbolo para':\n");
+    for (int i = 0; i < af->numTransicoes; i++) {
         int de, para;
         char simbolo;
-        fscanf(file, "%d %c %d", &de, &simbolo, &para);
-        af.transicoes[i] = (Transicao){de, simbolo, para};
+        scanf("%d %c %d", &de, &simbolo, &para);
+        af->transicoes[i] = (Transicao){de, simbolo, para};
     }
+}
 
-    fclose(file);
-    int rodando=1;
-    
-    while(rodando){
-        printf("\n1-Imprimir fecho epsilon\n2-Verificar palavra\n3-Sair\n");
+int main(void) {
+    AF_e af;
+    inserirAutomato(&af);
+
+    int rodando = 1;
+    while (rodando) {
+        printf("\n1-Imprimir fecho epsilon\n2-Verificar palavra\n3-Inserir novo automato\n4-Sair\n");
         int opcao;
-        scanf("%d",&opcao);
-        switch(opcao){
+        scanf("%d", &opcao);
+        switch (opcao) {
             case 1:
                 imprimirFechoEpsilon(&af);
                 break;
-            case 2:{
+            case 2: {
                 char palavra[100];
                 printf("\nDigite uma palavra: ");
                 scanf("%s", palavra);
-
                 if (ehAceito(&af, palavra)) {
                     printf("A palavra eh aceita.\n");
                 } else {
@@ -151,16 +137,15 @@ int main(void) {
                 break;
             }
             case 3:
-                rodando=0;
+                inserirAutomato(&af);
+                break;
+            case 4:
+                rodando = 0;
                 break;
             default:
                 printf("Opcao invalida\n");
                 break;
         }
     }
-
-    printf("Pressione qualquer tecla para fechar o programa...\n");
-    getchar();
-    getchar();
     return 0;
 }
