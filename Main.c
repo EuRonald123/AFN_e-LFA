@@ -23,7 +23,7 @@ typedef struct {
 void fechoEpsilon(int estado, int fecho[], AF_e *af) {
     fecho[estado] = 1;
     for (int i = 0; i < af->numTransicoes; i++) {
-        if (af->transicoes[i].de == estado && af->transicoes[i].simbolo == 'e' && !fecho[af->transicoes[i].para]) {
+        if (af->transicoes[i].de == estado && af->transicoes[i].simbolo == '&' && !fecho[af->transicoes[i].para]) {
             fechoEpsilon(af->transicoes[i].para, fecho, af);
         }
     }
