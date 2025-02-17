@@ -157,7 +157,6 @@ int main(void) {
                 break;
         }
     }
-
     printf("Pressione qualquer tecla para fechar o programa...\n");
     getchar();
     getchar();
