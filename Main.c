@@ -89,6 +89,20 @@ int ehAceito(AF_e *af, char *palavra) {
     return 0;
 }
 
+void adicionarTransicao(AF_e *af, char *entrada) {
+    int origem, destino;
+    char simbolo;
+    
+    if (sscanf(entrada, "%d %c %d", &origem, &simbolo, &destino) == 3) {
+        af->transicoes[af->numTransicoes].de = origem;
+        af->transicoes[af->numTransicoes].simbolo = simbolo;
+        af->transicoes[af->numTransicoes].para = destino;
+        af->numTransicoes++;
+    } else {
+        printf("Formato inválido. Use: <estado_origem> <simbolo> <estado_destino>\n");
+    }
+}
+
 void inserirAutomato(AF_e *af) {
     printf("Digite o numero de estados: ");
     scanf("%d", &af->numEstados);
@@ -101,14 +115,13 @@ void inserirAutomato(AF_e *af) {
         scanf("%d", &af->estadosFinais[i]);
     }
 
-    printf("Digite o numero de transicoes: ");
-    scanf("%d", &af->numTransicoes);
-    printf("Digite as transicoes no formato 'de simbolo para':\n");
-    for (int i = 0; i < af->numTransicoes; i++) {
-        int de, para;
-        char simbolo;
-        scanf("%d %c %d", &de, &simbolo, &para);
-        af->transicoes[i] = (Transicao){de, simbolo, para};
+    af->numTransicoes = 0;
+    char entrada[50];
+    getchar();
+
+    printf("Informe a funcao programa:\n");
+    while (fgets(entrada, sizeof(entrada), stdin) && entrada[0] != '\n') {
+        adicionarTransicao(af, entrada);
     }
 }
 
