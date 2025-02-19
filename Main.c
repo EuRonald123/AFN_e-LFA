@@ -1,3 +1,4 @@
+//ε
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -23,28 +24,39 @@ typedef struct {
 void fechoEpsilon(int estado, int fecho[], AF_e *af) {
     fecho[estado] = 1;
     for (int i = 0; i < af->numTransicoes; i++) {
-        if (af->transicoes[i].de == estado && af->transicoes[i].simbolo == '&' && !fecho[af->transicoes[i].para]) {
+        if (af->transicoes[i].de == estado && af->transicoes[i].simbolo == 'e' && !fecho[af->transicoes[i].para]) {
             fechoEpsilon(af->transicoes[i].para, fecho, af);
         }
     }
 }
 
-void imprimirFechoEpsilon(AF_e *af) {
-    for (int estado = 0; estado < af->numEstados; estado++) {
-        int fecho[MAX_ESTADOS] = {0};
-        fechoEpsilon(estado, fecho, af);
-        printf("Fecho epsilon do estado %d: {", estado);
-        int primeiro = 1;
-        for (int i = 0; i < af->numEstados; i++) {
-            if (fecho[i]) {
-                if (!primeiro) {
-                    printf(",");
-                }
-                printf("%d", i);
-                primeiro = 0;
+void imprimirFechoEpsilonPorEstado(AF_e *af, int estado) {
+    int fecho[MAX_ESTADOS] = {0};
+    fechoEpsilon(estado, fecho, af);
+    printf("\nFecho epsilon do estado %d: {", estado);
+    int primeiro = 1;
+    for (int i = 0; i < af->numEstados; i++) {
+        if (fecho[i]) {
+            if (!primeiro) {
+                printf(",");
             }
+            printf("%d", i);
+            primeiro = 0;
         }
-        printf("}\n");
+    }
+    printf("}\n");
+    imprimirNomes();
+}
+
+void imprimirFechoEpsilon(AF_e *af) {
+    int estado;
+    printf("Digite o estado para o qual deseja imprimir o fecho epsilon: ");
+    scanf("%d", &estado);
+    
+    if (estado < 0 || estado >= af->numEstados) {
+        printf("Estado inválido! Deve estar entre 0 e %d.\n", af->numEstados - 1);
+    } else {
+        imprimirFechoEpsilonPorEstado(af, estado);
     }
 }
 
@@ -125,6 +137,12 @@ void inserirAutomato(AF_e *af) {
     }
 }
 
+void imprimirNomes() {
+    printf("\n******************************\n");
+    printf("Filiphe N. S. Salgado \nRonald S. Costa \nJefferson M. A. de Almeida \nJoao G.P. Silva");
+    printf("\n******************************\n");
+}
+
 int main(void) {
     AF_e af;
     inserirAutomato(&af);
@@ -147,6 +165,7 @@ int main(void) {
                 } else {
                     printf("A palavra nao eh aceita.\n");
                 }
+                imprimirNomes();
                 break;
             }
             case 3:
